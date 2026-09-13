@@ -1,1596 +1,647 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ciddy S. Macapinlac | Full Stack Developer</title>
-    <meta name="description" content="Portfolio of Ciddy S. Macapinlac, a Full Stack Developer specializing in React, Spring Boot, and REST APIs.">
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        mono: ['Fira Code', 'monospace'],
-                    },
-                    colors: {
-                        slate: {
-                            850: '#151e2e',
-                            900: '#0f172a',
-                            950: '#020617',
-                        },
-                        emerald: {
-                            450: '#10b981',
-                        }
-                    },
-                    animation: {
-                        'blob': 'blob 7s infinite',
-                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
-                        'float': 'float 6s ease-in-out infinite',
-                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'spin-slow': 'spin 20s linear infinite',
-                        'bounce-slow': 'bounce 3s infinite',
-                    },
-                    keyframes: {
-                        blob: {
-                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
-                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
-                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
-                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
-                        },
-                        fadeInUp: {
-                            '0%': { opacity: '0', transform: 'translateY(30px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
-                        },
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0) rotate(0deg)' },
-                            '50%': { transform: 'translateY(-20px) rotate(5deg)' },
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        /* Loading Screen */
-        #loader {
-            position: fixed;
-            inset: 0;
-            background: #020617;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            transition: opacity 0.5s, visibility 0.5s;
-        }
-        #loader.hidden {
-            opacity: 0;
-            visibility: hidden;
-        }
-        .loader-circle {
-            width: 60px;
-            height: 60px;
-            border: 4px solid rgba(16, 185, 129, 0.2);
-            border-top-color: #10b981;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        /* Scroll Progress */
-        #scroll-progress {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #10b981, #a3e635);
-            z-index: 9998;
-            transition: width 0.1s;
-        }
-        
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0f172a;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, #10b981, #a3e635);
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(180deg, #059669, #84cc16);
-        }
-        
-        /* Glassmorphism utilities */
-        .glass {
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        }
-        
-        .glass-card {
-            background: rgba(30, 41, 59, 0.4);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .glass-card:hover {
-            background: rgba(30, 41, 59, 0.6);
-            border-color: rgba(16, 185, 129, 0.4);
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px -15px rgba(16, 185, 129, 0.3);
-        }
-        
-        /* Gradient Text */
-        .text-gradient {
-            background: linear-gradient(135deg, #34d399 0%, #a3e635 50%, #34d399 100%);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: gradientShift 3s ease infinite;
-        }
-        
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% center; }
-            50% { background-position: 100% center; }
-        }
-        
-        /* Animated Background Mesh */
-        .bg-mesh {
-            background-color: #020617;
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.15) 0px, transparent 50%),
-                radial-gradient(at 100% 0%, rgba(99, 102, 241, 0.1) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.1) 0px, transparent 50%),
-                radial-gradient(at 0% 100%, rgba(99, 102, 241, 0.05) 0px, transparent 50%);
-            background-attachment: fixed;
-        }
-        
-        /* Particle Canvas */
-        #particles-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
-        
-        /* Typing Cursor */
-        .typing-cursor {
-            display: inline-block;
-            width: 3px;
-            height: 1.2em;
-            background: #10b981;
-            margin-left: 4px;
-            animation: blink 1s step-end infinite;
-            vertical-align: text-bottom;
-        }
-        @keyframes blink {
-            50% { opacity: 0; }
-        }
-        
-        /* Skill Progress Bar */
-        .skill-progress {
-            height: 6px;
-            background: rgba(16, 185, 129, 0.2);
-            border-radius: 3px;
-            overflow: hidden;
-        }
-        .skill-progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #10b981, #a3e635);
-            border-radius: 3px;
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 1s ease-out;
-        }
-        .skill-progress-bar.animate {
-            transform: scaleX(1);
-        }
-        
-        /* Floating Elements */
-        .floating {
-            animation: float 6s ease-in-out infinite;
-        }
-        .floating-delay-1 {
-            animation-delay: 1s;
-        }
-        .floating-delay-2 {
-            animation-delay: 2s;
-        }
-        
-        /* Glow Effect */
-        .glow-emerald {
-            box-shadow: 0 0 30px rgba(16, 185, 129, 0.3);
-        }
-        
-        /* Back to Top Button */
-        #back-to-top {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #10b981, #a3e635);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #0f172a;
-            font-size: 1.25rem;
-            cursor: pointer;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(20px);
-            transition: all 0.3s ease;
-            z-index: 100;
-            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
-        }
-        #back-to-top.visible {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-        #back-to-top:hover {
-            transform: translateY(-5px) scale(1.1);
-            box-shadow: 0 15px 40px rgba(16, 185, 129, 0.4);
-        }
-        
-        /* Code Block Style */
-        .code-block {
-            font-family: 'Fira Code', monospace;
-            background: rgba(15, 23, 42, 0.8);
-            border: 1px solid rgba(16, 185, 129, 0.2);
-            border-radius: 12px;
-            padding: 1.5rem;
-            position: relative;
-            overflow: hidden;
-        }
-        .code-block::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 30px;
-            background: rgba(30, 41, 59, 0.5);
-            display: flex;
-            align-items: center;
-            padding-left: 1rem;
-        }
-        .code-dots {
-            display: flex;
-            gap: 6px;
-            position: absolute;
-            top: 10px;
-            left: 12px;
-        }
-        .code-dots span {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-        }
-        .code-dots span:nth-child(1) { background: #ef4444; }
-        .code-dots span:nth-child(2) { background: #eab308; }
-        .code-dots span:nth-child(3) { background: #22c55e; }
-        
-        /* Project Card Overlay */
-        .project-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(180deg, transparent 0%, rgba(2, 6, 23, 0.9) 100%);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        .project-card:hover .project-overlay {
-            opacity: 1;
-        }
-        
-        /* Resume Modal */
-        #resume-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(2, 6, 23, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            overflow-y: auto;
-        }
-        #resume-modal.active {
-            display: flex;
-        }
-        
-        /* Mobile Menu Animation */
-        #mobile-menu {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out;
-        }
-        #mobile-menu.open {
-            max-height: 400px;
-        }
-        
-        /* Resume Print Styles */
-        @media print {
-            body * {
-                visibility: hidden;
-            }
-            #resume-content, #resume-content * {
-                visibility: visible;
-            }
-            #resume-content {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                background: white;
-                color: black;
-            }
-            .no-print {
-                display: none !important;
-            }
-        }
-        
-        /* Section reveal animation */
-        .reveal {
-            opacity: 0;
-            transform: translateY(50px);
-            transition: all 0.8s ease;
-        }
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        /* Tech icon hover effect */
-        .tech-icon {
-            transition: all 0.3s ease;
-        }
-        .tech-icon:hover {
-            transform: scale(1.2) rotate(10deg);
-            filter: drop-shadow(0 0 10px currentColor);
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ciddy Macapinlac | AI Automation Specialist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0F1A2B;
+    --surface: #F7F5F0;
+    --steel: #3D5A80;
+    --amber: #E8A33D;
+    --slate: #5C6B73;
+    --line: #DEDAD0;
+    --white: #FFFFFF;
+    --serif: 'Newsreader', serif;
+    --sans: 'IBM Plex Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    color: var(--ink);
+    background: var(--surface);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; }
+
+  .wrap {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* ---------- NAV ---------- */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(247, 245, 240, 0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  nav .wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+  .nav-mark {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 500;
+  }
+  .nav-links {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+  }
+  .nav-links a {
+    text-decoration: none;
+    font-size: 14px;
+    color: var(--slate);
+    transition: color 0.15s;
+  }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-cta {
+    font-size: 14px;
+    font-weight: 500;
+    padding: 8px 18px;
+    border: 1px solid var(--ink);
+    border-radius: 3px;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  /* ---------- HERO ---------- */
+  header.hero {
+    padding: 88px 0 96px;
+    border-bottom: 1px solid var(--line);
+  }
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--slate);
+    margin-bottom: 28px;
+    font-family: var(--mono);
+  }
+  .status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--amber);
+    box-shadow: 0 0 0 3px rgba(232, 163, 61, 0.25);
+  }
+  h1.name {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 56px;
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    max-width: 620px;
+  }
+  h1.name em {
+    font-style: italic;
+    color: var(--steel);
+  }
+  .hero-sub {
+    margin-top: 22px;
+    font-size: 18px;
+    color: var(--slate);
+    max-width: 520px;
+    line-height: 1.6;
+  }
+  .hero-actions {
+    margin-top: 36px;
+    display: flex;
+    gap: 14px;
+  }
+  .btn {
+    display: inline-block;
+    padding: 12px 24px;
+    border-radius: 3px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .btn-primary {
+    background: var(--ink);
+    color: var(--white);
+  }
+  .btn-secondary {
+    border: 1px solid var(--ink);
+    color: var(--ink);
+  }
+
+  /* ---------- FLOW DIAGRAM ---------- */
+  .flow {
+    margin-top: 72px;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+  .flow-node {
+    flex: 0 0 auto;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 14px 18px;
+    min-width: 130px;
+  }
+  .flow-node .label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--steel);
+    letter-spacing: 0.01em;
+  }
+  .flow-node .value {
+    font-size: 14px;
+    margin-top: 4px;
+    font-weight: 500;
+  }
+  .flow-arrow {
+    flex: 0 0 auto;
+    width: 36px;
+    height: 1px;
+    background: var(--line);
+    position: relative;
+    margin: 0 -1px;
+  }
+  .flow-arrow::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: -3px;
+    width: 6px;
+    height: 6px;
+    border-right: 1px solid var(--slate);
+    border-top: 1px solid var(--slate);
+    transform: rotate(45deg);
+  }
+
+  /* ---------- SECTION HEADERS ---------- */
+  section { padding: 80px 0; border-bottom: 1px solid var(--line); }
+  section:last-of-type { border-bottom: none; }
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 40px;
+  }
+  h2.section-title {
+    font-family: var(--serif);
+    font-size: 30px;
+    font-weight: 500;
+  }
+  .section-tag {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--slate);
+  }
+
+  /* ---------- ABOUT ---------- */
+  .about-text {
+    font-size: 17px;
+    max-width: 620px;
+    color: #26313f;
+  }
+  .about-text p { margin-bottom: 18px; }
+  .about-facts {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    max-width: 620px;
+  }
+  .fact .k {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--steel);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .fact .v {
+    font-size: 15px;
+    margin-top: 4px;
+    font-weight: 500;
+  }
+
+  /* ---------- SKILLS ---------- */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px 48px;
+  }
+  .skill-group .group-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--steel);
+    margin-bottom: 10px;
+  }
+  .skill-group ul {
+    list-style: none;
+  }
+  .skill-group li {
+    font-size: 15px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--line);
+    color: #26313f;
+  }
+  .skill-group li:last-child { border-bottom: none; }
+
+  /* ---------- PROJECTS ---------- */
+  .project {
+    padding: 40px 0;
+    border-top: 1px solid var(--line);
+  }
+  .project:first-of-type { border-top: none; padding-top: 0; }
+  .project-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  h3.project-title {
+    font-family: var(--serif);
+    font-size: 24px;
+    font-weight: 500;
+  }
+  .project-status {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .status-live {
+    background: rgba(232, 163, 61, 0.15);
+    color: #8a5a12;
+  }
+  .status-case {
+    background: rgba(61, 90, 128, 0.12);
+    color: var(--steel);
+  }
+  .project-desc {
+    margin-top: 12px;
+    font-size: 15.5px;
+    color: #26313f;
+    max-width: 640px;
+  }
+  .project-flow {
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    align-items: stretch;
+  }
+  .pf-step {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 12px 16px;
+    flex: 1 1 140px;
+    min-width: 140px;
+  }
+  .pf-step .k {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--steel);
+    letter-spacing: 0.01em;
+  }
+  .pf-step .v {
+    font-size: 13.5px;
+    margin-top: 5px;
+    line-height: 1.4;
+  }
+  .pf-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    color: var(--slate);
+    font-size: 14px;
+  }
+  .project-tools {
+    margin-top: 18px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .tool-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--slate);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 3px 9px;
+  }
+  .project-link {
+    margin-top: 16px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    color: var(--steel);
+    display: inline-block;
+  }
+
+  /* ---------- CONTACT ---------- */
+  .contact-block {
+    text-align: left;
+  }
+  h2.contact-title {
+    font-family: var(--serif);
+    font-size: 38px;
+    font-weight: 500;
+    max-width: 500px;
+  }
+  .contact-sub {
+    margin-top: 14px;
+    font-size: 16px;
+    color: var(--slate);
+    max-width: 480px;
+  }
+  .contact-links {
+    margin-top: 32px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  footer {
+    padding: 32px 0 48px;
+    font-size: 13px;
+    color: var(--slate);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 200px;
+    gap: 40px;
+    align-items: start;
+  }
+  .hero-photo {
+    width: 200px;
+    height: 200px;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: var(--ink);
+  }
+  .hero-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(1) contrast(1.05) brightness(1.02);
+    mix-blend-mode: luminosity;
+  }
+  @media (max-width: 760px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero-photo { width: 120px; height: 120px; order: -1; margin-bottom: 8px; }
+    h1.name { font-size: 38px; }
+    .about-facts { grid-template-columns: 1fr 1fr; }
+    .skills-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    h2.contact-title { font-size: 28px; }
+    .project-flow { flex-direction: column; }
+    .pf-arrow { transform: rotate(90deg); width: auto; padding: 2px 0; }
+    .flow { flex-wrap: wrap; row-gap: 10px; }
+    .flow-arrow { display: none; }
+    .flow-node { flex: 1 1 calc(50% - 6px); min-width: 0; }
+  }
+</style>
 </head>
-<body class="bg-mesh text-slate-200 antialiased selection:bg-emerald-500/30 selection:text-emerald-200">
-    <!-- Loading Screen -->
-    <div id="loader">
-        <div class="text-center">
-            <div class="loader-circle mx-auto mb-4"></div>
-            <p class="text-emerald-400 font-mono text-sm">Loading portfolio...</p>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="nav-mark">Ciddy Macapinlac</div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a class="nav-cta" href="#contact">Get in touch</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="status-pill">
+          <span class="status-dot"></span>
+          Open for freelance &amp; contract work
         </div>
+        <h1 class="name">I build the systems that run <em>after</em> the sale closes.</h1>
+        <p class="hero-sub">AI Automation Specialist working across GoHighLevel, n8n, and LLM-integrated workflows. Currently building agentic automation infrastructure in production, plus taking on freelance automation projects.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#work">View work</a>
+          <a class="btn btn-secondary" href="#contact">Start a project</a>
+        </div>
+      </div>
+      <div class="hero-photo">
+        <img src="ciddy.jpg" alt="Ciddy Macapinlac">
+      </div>
     </div>
-    
-    <!-- Scroll Progress -->
-    <div id="scroll-progress"></div>
-    
-    <!-- Particle Canvas -->
-    <canvas id="particles-canvas"></canvas>
-    
-    <!-- Navigation -->
-    <header class="fixed top-0 w-full z-50 glass transition-all duration-300" id="navbar">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <!-- Logo -->
-                <a href="#" class="flex items-center gap-2 group">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-lime-500 flex items-center justify-center text-slate-900 font-bold text-xl shadow-lg shadow-emerald-500/20 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
-                        C
-                    </div>
-                    <span class="font-bold tracking-tight text-slate-100 group-hover:text-emerald-300 transition-colors">Ciddy<span class="text-emerald-400">.</span><span class="text-slate-400 font-mono text-sm">dev</span></span>
-                </a>
-                <!-- Desktop Menu -->
-                <nav class="hidden md:flex items-center gap-8 text-sm font-medium">
-                    <a href="#about" class="relative group py-2">
-                        <span class="hover:text-emerald-400 transition-colors">About</span>
-                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-emerald-400 group-hover:w-full transition-all duration-300"></span>
-                    </a>
-                    <a href="#skills" class="relative group py-2">
-                        <span class="hover:text-emerald-400 transition-colors">Skills</span>
-                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-emerald-400 group-hover:w-full transition-all duration-300"></span>
-                    </a>
-                    <a href="#projects" class="relative group py-2">
-                        <span class="hover:text-emerald-400 transition-colors">Projects</span>
-                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-emerald-400 group-hover:w-full transition-all duration-300"></span>
-                    </a>
-                    <a href="#experience" class="relative group py-2">
-                        <span class="hover:text-emerald-400 transition-colors">Experience</span>
-                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-emerald-400 group-hover:w-full transition-all duration-300"></span>
-                    </a>
-                    <button onclick="downloadResume()" class="px-5 py-2.5 rounded-full bg-gradient-to-r from-emerald-500 to-lime-500 text-slate-900 font-bold hover:shadow-lg hover:shadow-emerald-500/30 hover:scale-105 transition-all duration-300">
-                        <i class="fas fa-download mr-2"></i>Resume
-                    </button>
-                    <a href="#contact" class="px-5 py-2.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/20 hover:border-emerald-500/50 hover:shadow-lg hover:shadow-emerald-500/10 transition-all duration-300">
-                        Contact
-                    </a>
-                </nav>
-                <!-- Mobile Menu Button -->
-                <button id="mobile-menu-btn" class="md:hidden text-slate-300 hover:text-emerald-400 transition-colors p-2">
-                    <div class="w-6 h-5 flex flex-col justify-between" id="hamburger">
-                        <span class="w-full h-0.5 bg-current transition-all duration-300 origin-left"></span>
-                        <span class="w-full h-0.5 bg-current transition-all duration-300"></span>
-                        <span class="w-full h-0.5 bg-current transition-all duration-300 origin-left"></span>
-                    </div>
-                </button>
-            </div>
-        </div>
-        <!-- Mobile Menu Panel -->
-        <div id="mobile-menu" class="md:hidden border-t border-slate-800 bg-slate-900/95 backdrop-blur-xl">
-            <div class="px-4 pt-2 pb-6 space-y-1">
-                <a href="#about" class="block px-3 py-3 text-base font-medium hover:bg-slate-800 rounded-lg text-slate-300 hover:text-emerald-400 transition-all">About</a>
-                <a href="#skills" class="block px-3 py-3 text-base font-medium hover:bg-slate-800 rounded-lg text-slate-300 hover:text-emerald-400 transition-all">Skills</a>
-                <a href="#projects" class="block px-3 py-3 text-base font-medium hover:bg-slate-800 rounded-lg text-slate-300 hover:text-emerald-400 transition-all">Projects</a>
-                <a href="#experience" class="block px-3 py-3 text-base font-medium hover:bg-slate-800 rounded-lg text-slate-300 hover:text-emerald-400 transition-all">Experience</a>
-                <button onclick="downloadResume()" class="block w-full text-left px-3 py-3 text-base font-medium hover:bg-slate-800 rounded-lg text-slate-300 hover:text-emerald-400 transition-all">
-                    <i class="fas fa-download mr-2"></i>Resume
-                </button>
-                <a href="#contact" class="block px-3 py-3 text-base font-medium text-emerald-400 font-semibold hover:bg-emerald-500/10 rounded-lg transition-all">Contact Me</a>
-            </div>
-        </div>
-    </header>
-    
-    <!-- Main Content -->
-    <main class="relative pt-20">
-        <!-- Hero Section -->
-        <section id="hero" class="min-h-screen flex items-center justify-center relative overflow-hidden px-4">
-            <!-- Background glow effects -->
-            <div class="absolute top-20 left-10 w-96 h-96 bg-emerald-500/20 rounded-full mix-blend-screen filter blur-3xl opacity-40 animate-blob"></div>
-            <div class="absolute top-40 right-10 w-96 h-96 bg-indigo-500/20 rounded-full mix-blend-screen filter blur-3xl opacity-30 animate-blob" style="animation-delay: 2s;"></div>
-            <div class="absolute bottom-20 left-1/2 w-96 h-96 bg-lime-500/15 rounded-full mix-blend-screen filter blur-3xl opacity-30 animate-blob" style="animation-delay: 4s;"></div>
-            
-            <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center relative z-10">
-                <div class="order-2 md:order-1 space-y-8 text-center md:text-left">
-                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-900/30 border border-emerald-500/30 text-emerald-300 text-xs font-semibold tracking-wide uppercase animate-fade-in-up">
-                        <span class="relative flex h-2 w-2">
-                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                        </span>
-                        Open to Internships
-                    </div>
-                    
-                    <div class="animate-fade-in-up" style="animation-delay: 0.2s;">
-                        <p class="text-slate-400 text-lg mb-2 font-mono">&lt;Hello World /&gt;</p>
-                        <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight">
-                            I'm <span class="text-gradient">Ciddy</span>
-                            <br>
-                            <span id="typing-text" class="text-slate-100"></span><span class="typing-cursor"></span>
-                        </h1>
-                    </div>
-                    
-                    <p class="text-lg md:text-xl text-slate-400 leading-relaxed max-w-lg mx-auto md:mx-0 animate-fade-in-up" style="animation-delay: 0.4s;">
-                        A passionate <span class="text-emerald-400 font-semibold">Full Stack Developer</span> crafting robust web applications with <span class="text-slate-200">Java</span>, <span class="text-slate-200">Spring Boot</span>, and <span class="text-slate-200">React</span>.
-                    </p>
-                    
-                    <div class="flex flex-col sm:flex-row items-center gap-4 justify-center md:justify-start pt-2 animate-fade-in-up" style="animation-delay: 0.6s;">
-                        <a href="#projects" class="group px-8 py-4 rounded-full bg-gradient-to-r from-emerald-500 to-lime-500 text-slate-900 font-bold text-sm shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 hover:scale-105 transition-all duration-300 flex items-center gap-2">
-                            View Projects
-                            <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
-                        </a>
-                        <a href="#contact" class="px-8 py-4 rounded-full bg-transparent border-2 border-slate-700 text-slate-300 font-semibold text-sm hover:border-emerald-500/50 hover:text-emerald-400 hover:bg-emerald-500/5 transition-all duration-300">
-                            Let's Talk
-                        </a>
-                    </div>
-                    
-                    <div class="pt-6 flex items-center justify-center md:justify-start gap-6 text-2xl animate-fade-in-up" style="animation-delay: 0.8s;">
-                        <a href="https://www.linkedin.com/in/ciddy-macapinlac-580a1432a" target="_blank" rel="noopener noreferrer" class="text-slate-500 hover:text-blue-400 transition-all duration-300 hover:-translate-y-2 hover:scale-110">
-                            <i class="fab fa-linkedin"></i>
-                        </a>
-                        <a href="https://github.com/ciddysed" target="_blank" rel="noopener noreferrer" class="text-slate-500 hover:text-white transition-all duration-300 hover:-translate-y-2 hover:scale-110">
-                            <i class="fab fa-github"></i>
-                        </a>
-                        <a href="mailto:zed.maxcapinlac@gmail.com" class="text-slate-500 hover:text-emerald-400 transition-all duration-300 hover:-translate-y-2 hover:scale-110">
-                            <i class="fas fa-envelope"></i>
-                        </a>
-                    </div>
-                </div>
-                
-                <div class="order-1 md:order-2 flex justify-center animate-fade-in-up" style="animation-delay: 0.3s;">
-                    <div class="relative w-72 h-72 md:w-96 md:h-96">
-                        <!-- Rotating ring -->
-                        <div class="absolute inset-0 rounded-full border-2 border-dashed border-emerald-500/30 animate-spin-slow"></div>
-                        
-                        <!-- Glow effect -->
-                        <div class="absolute inset-4 bg-gradient-to-tr from-emerald-500 to-lime-500 rounded-full blur-2xl opacity-30 animate-pulse-slow"></div>
-                        
-                        <!-- Profile image -->
-                        <div class="absolute inset-8 rounded-full overflow-hidden border-4 border-slate-800 shadow-2xl glow-emerald">
-                            <img 
-                                src="face.png" 
-                                alt="Ciddy S. Macapinlac" 
-                                class="w-full h-full object-cover"
-                                onerror="this.src=face.png"
-                            >
-                        </div>
-                        
-                        <!-- Floating Tech Badges -->
-                        <div class="absolute -top-2 right-8 floating">
-                            <div class="bg-slate-800/90 backdrop-blur p-4 rounded-2xl border border-slate-700 shadow-xl">
-                                <i class="fab fa-java text-3xl text-orange-500 tech-icon"></i>
-                            </div>
-                        </div>
-                        <div class="absolute top-1/2 -right-4 floating floating-delay-1">
-                            <div class="bg-slate-800/90 backdrop-blur p-4 rounded-2xl border border-slate-700 shadow-xl">
-                                <i class="fab fa-react text-3xl text-cyan-400 tech-icon"></i>
-                            </div>
-                        </div>
-                        <div class="absolute -bottom-2 right-12 floating floating-delay-2">
-                            <div class="bg-slate-800/90 backdrop-blur p-4 rounded-2xl border border-slate-700 shadow-xl">
-                                <i class="fas fa-leaf text-3xl text-green-500 tech-icon"></i>
-                            </div>
-                        </div>
-                        <div class="absolute top-1/3 -left-4 floating" style="animation-delay: 1.5s;">
-                            <div class="bg-slate-800/90 backdrop-blur p-4 rounded-2xl border border-slate-700 shadow-xl">
-                                <i class="fab fa-js text-3xl text-yellow-400 tech-icon"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Scroll indicator -->
-            <div class="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2 text-slate-500">
-                <span class="text-xs uppercase tracking-wider">Scroll</span>
-                <div class="w-6 h-10 rounded-full border-2 border-slate-700 flex justify-center p-2">
-                    <div class="w-1 h-3 bg-emerald-400 rounded-full animate-bounce"></div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- About Section -->
-        <section id="about" class="py-24 px-4 relative">
-            <div class="max-w-5xl mx-auto">
-                <div class="text-center mb-16 reveal">
-                    <span class="text-emerald-400 font-mono text-sm">// who am i</span>
-                    <h2 class="text-3xl md:text-5xl font-bold text-slate-100 mt-2">About Me</h2>
-                    <div class="h-1 w-20 bg-gradient-to-r from-emerald-500 to-lime-500 mx-auto rounded-full mt-4"></div>
-                </div>
-                
-                <div class="grid md:grid-cols-5 gap-8 items-center reveal">
-                    <!-- Code Block -->
-                    <div class="md:col-span-2 code-block">
-                        <div class="code-dots">
-                            <span></span><span></span><span></span>
-                        </div>
-                        <div class="pt-8 text-sm">
-                            <p class="text-slate-500">// Developer Profile</p>
-                            <p><span class="text-purple-400">const</span> <span class="text-cyan-300">developer</span> = {</p>
-                            <p class="pl-4"><span class="text-emerald-400">name</span>: <span class="text-amber-300">"Ciddy"</span>,</p>
-                            <p class="pl-4"><span class="text-emerald-400">role</span>: <span class="text-amber-300">"Full Stack"</span>,</p>
-                            <p class="pl-4"><span class="text-emerald-400">location</span>: <span class="text-amber-300">"Cebu, PH"</span>,</p>
-                            <p class="pl-4"><span class="text-emerald-400">passion</span>: <span class="text-amber-300">"Building"</span></p>
-                            <p>};</p>
-                        </div>
-                    </div>
-                    
-                    <!-- About Content -->
-                    <div class="md:col-span-3 space-y-6">
-                        <p class="text-slate-300 leading-relaxed text-lg">
-                            I'm an IT student at <span class="text-emerald-400 font-medium">Cebu Institute of Technology - University</span> (Class of 2025). 
-                            My journey in tech is driven by a desire to build real-world solutions that matter.
-                        </p>
-                        <p class="text-slate-300 leading-relaxed text-lg">
-                            I specialize in <span class="text-slate-100 font-semibold">backend development</span> with Java & Spring Boot, while also maintaining strong proficiency in creating responsive <span class="text-slate-100 font-semibold">frontend interfaces</span> using React.
-                        </p>
-                        
-                        <div class="grid grid-cols-2 gap-4 pt-4">
-                            <div class="glass-card p-5 rounded-xl text-center group cursor-pointer">
-                                <div class="w-14 h-14 mx-auto mb-3 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-400 group-hover:scale-110 group-hover:bg-emerald-500/20 transition-all">
-                                    <i class="fas fa-graduation-cap text-2xl"></i>
-                                </div>
-                                <h3 class="font-bold text-slate-200">Education</h3>
-                                <p class="text-xs text-slate-400 uppercase tracking-wide mt-1">BS IT (2021-2025)</p>
-                            </div>
-                            <div class="glass-card p-5 rounded-xl text-center group cursor-pointer">
-                                <div class="w-14 h-14 mx-auto mb-3 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-400 group-hover:scale-110 group-hover:bg-emerald-500/20 transition-all">
-                                    <i class="fas fa-code text-2xl"></i>
-                                </div>
-                                <h3 class="font-bold text-slate-200">Focus</h3>
-                                <p class="text-xs text-slate-400 uppercase tracking-wide mt-1">Full Stack Dev</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Skills Section -->
-        <section id="skills" class="py-24 px-4 bg-slate-900/50 relative">
-            <div class="max-w-6xl mx-auto">
-                <div class="text-center mb-16 reveal">
-                    <span class="text-emerald-400 font-mono text-sm">// what i use</span>
-                    <h2 class="text-3xl md:text-5xl font-bold text-slate-100 mt-2">Technical Arsenal</h2>
-                    <p class="text-slate-400 max-w-2xl mx-auto mt-4">The tools and technologies I use to bring ideas to life.</p>
-                </div>
-                
-                <!-- Skills Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 reveal">
-                    <!-- Backend -->
-                    <div class="glass-card p-6 rounded-2xl space-y-5 group">
-                        <div class="flex items-center gap-4">
-                            <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-red-500/20 to-orange-500/20 flex items-center justify-center text-red-500 group-hover:scale-110 transition-transform">
-                                <i class="fas fa-server text-2xl"></i>
-                            </div>
-                            <h3 class="text-xl font-bold text-slate-100">Backend</h3>
-                        </div>
-                        <ul class="space-y-3">
-                            <li class="flex items-center justify-between">
-                                <span class="flex items-center gap-2 text-slate-300 text-sm"><i class="fab fa-java text-orange-500"></i> Java</span>
-                                <span class="text-xs text-emerald-400">Advanced</span>
-                            </li>
-                            <li class="flex items-center justify-between">
-                                <span class="flex items-center gap-2 text-slate-300 text-sm"><i class="fas fa-leaf text-green-500"></i> Spring Boot</span>
-                                <span class="text-xs text-emerald-400">Advanced</span>
-                            </li>
-                            <li class="flex items-center justify-between">
-                                <span class="flex items-center gap-2 text-slate-300 text-sm"><i class="fab fa-php text-indigo-400"></i> PHP</span>
-                                <span class="text-xs text-slate-400">Intermediate</span>
-                            </li>
-                            <li class="flex items-center justify-between">
-                                <span class="flex items-center gap-2 text-slate-300 text-sm"><i class="fab fa-python text-yellow-400"></i> Python</span>
-                                <span class="text-xs text-slate-400">Intermediate</span>
-                            </li>
-                        </ul>
-                    </div>
-                    
-                    <!-- Frontend -->
-                    <div class="glass-card p-6 rounded-2xl space-y-5 group">
-                        <div class="flex items-center gap-4">
-                            <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform">
-                                <i class="fas fa-laptop-code text-2xl"></i>
-                            </div>
-                            <h3 class="text-xl font-bold text-slate-100">Frontend</h3>
-                        </div>
-                        <ul class="space-y-3">
-                            <li class="flex items-center justify-between">
-                                <span class="flex items-center gap-2 text-slate-300 text-sm"><i class="fab fa-react text-cyan-400"></i> React.js</span>
-                                <span class="text-xs text-emerald-400">Advanced</span>
-                            </li>
-                            <li class="flex items-center justify-between">
-                                <span class="flex items-center gap-2 text-slate-300 text-sm"><i class="fab fa-js text-yellow-400"></i> JavaScript</span>
-                                <span class="text-xs text-emerald-400">Advanced</span>
-                            </li>
-                            <li class="flex items-center justify-between">
-                                <span class="flex items-center gap-2 text-slate-300 text-sm"><i class="fab fa-html5 text-orange-500"></i> HTML5/CSS3</span>
-                                <span class="text-xs text-emerald-400">Advanced</span>
-                            </li>
-                            <li class="flex items-center justify-between">
-                                <span class="flex items-center gap-2 text-slate-300 text-sm"><i class="fas fa-wind text-cyan-400"></i> Tailwind</span>
-                                <span class="text-xs text-emerald-400">Advanced</span>
-                            </li>
-                        </ul>
-                    </div>
-                    
-                    <!-- Database -->
-                    <div class="glass-card p-6 rounded-2xl space-y-5 group">
-                        <div class="flex items-center gap-4">
-                            <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-yellow-500/20 to-amber-500/20 flex items-center justify-center text-yellow-500 group-hover:scale-110 transition-transform">
-                                <i class="fas fa-database text-2xl"></i>
-                            </div>
-                            <h3 class="text-xl font-bold text-slate-100">Database</h3>
-                        </div>
-                        <ul class="space-y-3">
-                            <li class="flex items-center justify-between">
-                                <span class="flex items-center gap-2 text-slate-300 text-sm"><i class="fas fa-database text-blue-400"></i> MySQL</span>
-                                <span class="text-xs text-emerald-400">Advanced</span>
-                            </li>
-                            <li class="flex items-center justify-between">
-                                <span class="flex items-center gap-2 text-slate-300 text-sm"><i class="fas fa-database text-blue-600"></i> PostgreSQL</span>
-                                <span class="text-xs text-slate-400">Intermediate</span>
-                            </li>
-                            <li class="flex items-center justify-between">
-                                <span class="flex items-center gap-2 text-slate-300 text-sm"><i class="fas fa-project-diagram text-purple-400"></i> ERD Design</span>
-                                <span class="text-xs text-emerald-400">Advanced</span>
-                            </li>
-                        </ul>
-                    </div>
-                    
-                    <!-- Tools -->
-                    <div class="glass-card p-6 rounded-2xl space-y-5 group">
-                        <div class="flex items-center gap-4">
-                            <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center text-purple-400 group-hover:scale-110 transition-transform">
-                                <i class="fas fa-tools text-2xl"></i>
-                            </div>
-                            <h3 class="text-xl font-bold text-slate-100">Tools</h3>
-                        </div>
-                        <ul class="space-y-3">
-                            <li class="flex items-center justify-between">
-                                <span class="flex items-center gap-2 text-slate-300 text-sm"><i class="fab fa-git-alt text-orange-500"></i> Git/GitHub</span>
-                                <span class="text-xs text-emerald-400">Advanced</span>
-                            </li>
-                            <li class="flex items-center justify-between">
-                                <span class="flex items-center gap-2 text-slate-300 text-sm"><i class="fab fa-aws text-orange-400"></i> AWS</span>
-                                <span class="text-xs text-slate-400">Foundation</span>
-                            </li>
-                            <li class="flex items-center justify-between">
-                                <span class="flex items-center gap-2 text-slate-300 text-sm"><i class="fas fa-cloud text-cyan-400"></i> Netlify</span>
-                                <span class="text-xs text-emerald-400">Advanced</span>
-                            </li>
-                            <li class="flex items-center justify-between">
-                                <span class="flex items-center gap-2 text-slate-300 text-sm"><i class="fas fa-terminal text-blue-400"></i> VS Code</span>
-                                <span class="text-xs text-emerald-400">Advanced</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <!-- Skill Bars -->
-                <div class="mt-16 glass-card p-8 rounded-2xl reveal">
-                    <h3 class="text-xl font-bold text-slate-100 mb-6">Proficiency Levels</h3>
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div class="space-y-4">
-                            <div>
-                                <div class="flex justify-between text-sm mb-2">
-                                    <span class="text-slate-300">Java & Spring Boot</span>
-                                    <span class="text-emerald-400">90%</span>
-                                </div>
-                                <div class="skill-progress">
-                                    <div class="skill-progress-bar" style="--progress: 0.9"></div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="flex justify-between text-sm mb-2">
-                                    <span class="text-slate-300">React.js</span>
-                                    <span class="text-emerald-400">85%</span>
-                                </div>
-                                <div class="skill-progress">
-                                    <div class="skill-progress-bar" style="--progress: 0.85"></div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="flex justify-between text-sm mb-2">
-                                    <span class="text-slate-300">JavaScript/TypeScript</span>
-                                    <span class="text-emerald-400">85%</span>
-                                </div>
-                                <div class="skill-progress">
-                                    <div class="skill-progress-bar" style="--progress: 0.85"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="space-y-4">
-                            <div>
-                                <div class="flex justify-between text-sm mb-2">
-                                    <span class="text-slate-300">MySQL/PostgreSQL</span>
-                                    <span class="text-emerald-400">80%</span>
-                                </div>
-                                <div class="skill-progress">
-                                    <div class="skill-progress-bar" style="--progress: 0.8"></div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="flex justify-between text-sm mb-2">
-                                    <span class="text-slate-300">REST API Development</span>
-                                    <span class="text-emerald-400">88%</span>
-                                </div>
-                                <div class="skill-progress">
-                                    <div class="skill-progress-bar" style="--progress: 0.88"></div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="flex justify-between text-sm mb-2">
-                                    <span class="text-slate-300">Git & DevOps</span>
-                                    <span class="text-emerald-400">75%</span>
-                                </div>
-                                <div class="skill-progress">
-                                    <div class="skill-progress-bar" style="--progress: 0.75"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Projects Section -->
-        <section id="projects" class="py-24 px-4">
-            <div class="max-w-6xl mx-auto">
-                <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4 reveal">
-                    <div>
-                        <span class="text-emerald-400 font-mono text-sm">// my work</span>
-                        <h2 class="text-3xl md:text-5xl font-bold text-slate-100 mt-2">Featured Projects</h2>
-                        <p class="text-slate-400 max-w-xl mt-4">
-                            A selection of projects that demonstrate my ability to solve problems and build end-to-end solutions.
-                        </p>
-                    </div>
-                    <a href="https://github.com/ciddysed" target="_blank" rel="noopener noreferrer" class="hidden md:flex items-center gap-2 text-emerald-400 hover:text-emerald-300 transition-colors font-medium group">
-                        View All on GitHub 
-                        <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
-                    </a>
-                </div>
-                
-                <div class="grid md:grid-cols-2 gap-8">
-                    <!-- Project 1: SleepSync -->
-                    <article class="glass-card rounded-3xl overflow-hidden group project-card reveal">
-                        <div class="h-52 relative overflow-hidden">
-                            <div class="absolute inset-0 bg-gradient-to-br from-indigo-900 via-purple-900 to-slate-900">
-                                <div class="absolute inset-0 flex items-center justify-center">
-                                    <i class="fas fa-moon text-8xl text-indigo-400/20 group-hover:scale-110 group-hover:rotate-12 transition-all duration-500"></i>
-                                </div>
-                            </div>
-                            <div class="project-overlay flex items-end p-6">
-                                <p class="text-white text-sm">Track and improve sleep quality with data visualization</p>
-                            </div>
-                            <div class="absolute top-4 right-4 flex gap-2">
-                                <span class="bg-slate-950/80 backdrop-blur px-3 py-1 rounded-full text-xs font-mono text-emerald-400 border border-emerald-500/30">
-                                    Full Stack
-                                </span>
-                            </div>
-                        </div>
-                        <div class="p-8">
-                            <h3 class="text-2xl font-bold text-slate-100 mb-2 group-hover:text-emerald-400 transition-colors">SleepSync</h3>
-                            <p class="text-slate-400 text-sm mb-4">
-                                A comprehensive wellness platform helping users track and improve sleep quality through data visualization and personalized recommendations.
-                            </p>
-                            <div class="flex flex-wrap gap-2 mb-6">
-                                <span class="px-3 py-1 rounded-full bg-slate-800/80 text-xs text-slate-300 border border-slate-700">React</span>
-                                <span class="px-3 py-1 rounded-full bg-slate-800/80 text-xs text-slate-300 border border-slate-700">Spring Boot</span>
-                                <span class="px-3 py-1 rounded-full bg-slate-800/80 text-xs text-slate-300 border border-slate-700">MySQL</span>
-                                <span class="px-3 py-1 rounded-full bg-slate-800/80 text-xs text-slate-300 border border-slate-700">REST API</span>
-                            </div>
-                            <div class="flex items-center gap-4">
-                                <a href="https://sleepsyncapp.netlify.app/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-lime-600 text-white font-medium hover:from-emerald-500 hover:to-lime-500 transition-all shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30">
-                                    <i class="fas fa-external-link-alt mr-2"></i>Live Demo
-                                </a>
-                                <a href="#" class="p-3 rounded-xl bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-all border border-slate-700">
-                                    <i class="fab fa-github text-lg"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </article>
-                    
-                    <!-- Project 2: ETEEAPP -->
-                    <article class="glass-card rounded-3xl overflow-hidden group project-card reveal">
-                        <div class="h-52 relative overflow-hidden">
-                            <div class="absolute inset-0 bg-gradient-to-br from-emerald-900 via-teal-900 to-slate-900">
-                                <div class="absolute inset-0 flex items-center justify-center">
-                                    <i class="fas fa-file-alt text-8xl text-emerald-400/20 group-hover:scale-110 group-hover:rotate-12 transition-all duration-500"></i>
-                                </div>
-                            </div>
-                            <div class="project-overlay flex items-end p-6">
-                                <p class="text-white text-sm">Streamline academic application workflows</p>
-                            </div>
-                            <div class="absolute top-4 right-4">
-                                <span class="bg-slate-950/80 backdrop-blur px-3 py-1 rounded-full text-xs font-mono text-emerald-400 border border-emerald-500/30">
-                                    Workflow System
-                                </span>
-                            </div>
-                        </div>
-                        <div class="p-8">
-                            <h3 class="text-2xl font-bold text-slate-100 mb-2 group-hover:text-emerald-400 transition-colors">ETEEAPP System</h3>
-                            <p class="text-slate-400 text-sm mb-4">
-                                Digital workflow platform streamlining the application process for the ETEEAP program, automating document handling and status tracking.
-                            </p>
-                            <div class="flex flex-wrap gap-2 mb-6">
-                                <span class="px-3 py-1 rounded-full bg-slate-800/80 text-xs text-slate-300 border border-slate-700">React</span>
-                                <span class="px-3 py-1 rounded-full bg-slate-800/80 text-xs text-slate-300 border border-slate-700">Automation</span>
-                                <span class="px-3 py-1 rounded-full bg-slate-800/80 text-xs text-slate-300 border border-slate-700">Web App</span>
-                            </div>
-                            <div class="flex items-center gap-4">
-                                <a href="https://eteeap.netlify.app" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-lime-600 text-white font-medium hover:from-emerald-500 hover:to-lime-500 transition-all shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30">
-                                    <i class="fas fa-external-link-alt mr-2"></i>Live Demo
-                                </a>
-                                <a href="#" class="p-3 rounded-xl bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-all border border-slate-700">
-                                    <i class="fab fa-github text-lg"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </article>
-                    
-                    <!-- Project 3: KnowledgeForge -->
-                    <article class="glass-card rounded-3xl overflow-hidden group project-card reveal">
-                        <div class="h-52 relative overflow-hidden">
-                            <div class="absolute inset-0 bg-gradient-to-br from-amber-900 via-orange-900 to-slate-900">
-                                <div class="absolute inset-0 flex items-center justify-center">
-                                    <i class="fas fa-network-wired text-8xl text-amber-400/20 group-hover:scale-110 group-hover:rotate-12 transition-all duration-500"></i>
-                                </div>
-                            </div>
-                            <div class="project-overlay flex items-end p-6">
-                                <p class="text-white text-sm">Knowledge management and collaboration</p>
-                            </div>
-                            <div class="absolute top-4 right-4">
-                                <span class="bg-slate-950/80 backdrop-blur px-3 py-1 rounded-full text-xs font-mono text-amber-400 border border-amber-500/30">
-                                    Repository
-                                </span>
-                            </div>
-                        </div>
-                        <div class="p-8">
-                            <h3 class="text-2xl font-bold text-slate-100 mb-2 group-hover:text-emerald-400 transition-colors">KnowledgeForge</h3>
-                            <p class="text-slate-400 text-sm mb-4">
-                                A dynamic knowledge management repository designed to streamline information sharing and collaboration within teams.
-                            </p>
-                            <div class="flex flex-wrap gap-2 mb-6">
-                                <span class="px-3 py-1 rounded-full bg-slate-800/80 text-xs text-slate-300 border border-slate-700">Java</span>
-                                <span class="px-3 py-1 rounded-full bg-slate-800/80 text-xs text-slate-300 border border-slate-700">Backend</span>
-                                <span class="px-3 py-1 rounded-full bg-slate-800/80 text-xs text-slate-300 border border-slate-700">API</span>
-                            </div>
-                            <div class="flex items-center gap-4">
-                                <a href="https://github.com/ciddysed/KnowledgeForge_Repository.git" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-3 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white transition-all border border-slate-700">
-                                    <i class="fab fa-github mr-2"></i>View Code
-                                </a>
-                            </div>
-                        </div>
-                    </article>
-                    
-                    <!-- Project 4: Cardano Wallet -->
-                    <article class="glass-card rounded-3xl overflow-hidden group project-card reveal">
-                        <div class="h-52 relative overflow-hidden">
-                            <div class="absolute inset-0 bg-gradient-to-br from-blue-900 via-indigo-900 to-slate-900">
-                                <div class="absolute inset-0 flex items-center justify-center">
-                                    <i class="fas fa-wallet text-8xl text-blue-400/20 group-hover:scale-110 group-hover:rotate-12 transition-all duration-500"></i>
-                                </div>
-                            </div>
-                            <div class="project-overlay flex items-end p-6">
-                                <p class="text-white text-sm">Digital wallet for blockchain ecosystem</p>
-                            </div>
-                            <div class="absolute top-4 right-4">
-                                <span class="bg-slate-950/80 backdrop-blur px-3 py-1 rounded-full text-xs font-mono text-blue-400 border border-blue-500/30">
-                                    Blockchain
-                                </span>
-                            </div>
-                        </div>
-                        <div class="p-8">
-                            <h3 class="text-2xl font-bold text-slate-100 mb-2 group-hover:text-emerald-400 transition-colors">Cardano Wallet</h3>
-                            <p class="text-slate-400 text-sm mb-4">
-                                A secure digital wallet application developed for the Cardano ecosystem, featuring transaction management and asset tracking.
-                            </p>
-                            <div class="flex flex-wrap gap-2 mb-6">
-                                <span class="px-3 py-1 rounded-full bg-slate-800/80 text-xs text-slate-300 border border-slate-700">React</span>
-                                <span class="px-3 py-1 rounded-full bg-slate-800/80 text-xs text-slate-300 border border-slate-700">Blockchain</span>
-                                <span class="px-3 py-1 rounded-full bg-slate-800/80 text-xs text-slate-300 border border-slate-700">Web3</span>
-                            </div>
-                            <div class="flex items-center gap-4">
-                                <a href="https://github.com/ciddysed/Notes_App.git" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-3 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white transition-all border border-slate-700">
-                                    <i class="fab fa-github mr-2"></i>View Code
-                                </a>
-                            </div>
-                        </div>
-                    </article>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Experience Timeline -->
-        <section id="experience" class="py-24 px-4 bg-slate-900/50">
-            <div class="max-w-4xl mx-auto">
-                <div class="text-center mb-16 reveal">
-                    <span class="text-emerald-400 font-mono text-sm">// my journey</span>
-                    <h2 class="text-3xl md:text-5xl font-bold text-slate-100 mt-2">Experience & Education</h2>
-                </div>
-                
-                <div class="relative">
-                    <!-- Timeline line -->
-                    <div class="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-emerald-500 via-emerald-500/50 to-transparent"></div>
-                    
-                    <!-- Timeline Item 1 -->
-                    <div class="relative pl-12 md:pl-0 mb-12 reveal">
-                        <div class="md:w-1/2 md:ml-auto md:pl-12">
-                            <!-- Dot -->
-                            <div class="absolute left-2.5 md:left-1/2 md:-translate-x-1/2 w-4 h-4 rounded-full bg-emerald-500 border-4 border-slate-900 z-10 shadow-lg shadow-emerald-500/50"></div>
-                            
-                            <div class="glass-card p-6 rounded-2xl relative group">
-                                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-semibold mb-3">
-                                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                                    Ongoing
-                                </span>
-                                <h3 class="text-xl font-bold text-slate-100">Tech Support</h3>
-                                <p class="text-emerald-400 text-sm font-medium mb-3">MICASA (Family Business)</p>
-                                <p class="text-slate-400 text-sm leading-relaxed">
-                                    Maintaining daily IT operations, resolving hardware/software issues, and developing internal tools to optimize workflows.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Timeline Item 2 -->
-                    <div class="relative pl-12 md:pl-0 mb-12 reveal">
-                        <div class="md:w-1/2 md:pr-12">
-                            <!-- Dot -->
-                            <div class="absolute left-2.5 md:left-1/2 md:-translate-x-1/2 w-4 h-4 rounded-full bg-emerald-500 border-4 border-slate-900 z-10"></div>
-                            
-                            <div class="glass-card p-6 rounded-2xl relative group md:text-right">
-                                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 text-blue-400 text-xs font-semibold mb-3">
-                                    2021 - 2025
-                                </span>
-                                <h3 class="text-xl font-bold text-slate-100">BS Information Technology</h3>
-                                <p class="text-emerald-400 text-sm font-medium mb-3">Cebu Institute of Technology - University</p>
-                                <p class="text-slate-400 text-sm leading-relaxed">
-                                    Focused on software engineering, database management, and cloud computing. Building strong foundations in full-stack development.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Timeline Item 3 - Certifications -->
-                    <div class="relative pl-12 md:pl-0 reveal">
-                        <div class="md:w-1/2 md:ml-auto md:pl-12">
-                            <!-- Dot -->
-                            <div class="absolute left-2.5 md:left-1/2 md:-translate-x-1/2 w-4 h-4 rounded-full bg-purple-500 border-4 border-slate-900 z-10"></div>
-                            
-                            <div class="glass-card p-6 rounded-2xl">
-                                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/20 text-purple-400 text-xs font-semibold mb-3">
-                                    <i class="fas fa-certificate"></i>
-                                    Certifications
-                                </span>
-                                <h3 class="text-xl font-bold text-slate-100 mb-4">Professional Credentials</h3>
-                                <div class="space-y-3">
-                                    <div class="flex items-center gap-3 p-3 rounded-lg bg-slate-800/50 hover:bg-slate-800 transition-colors">
-                                        <i class="fab fa-aws text-2xl text-orange-400"></i>
-                                        <div>
-                                            <p class="text-sm font-semibold text-slate-200">AWS Cloud Foundation</p>
-                                            <p class="text-xs text-slate-500">Amazon Web Services</p>
-                                        </div>
-                                    </div>
-                                    <div class="flex items-center gap-3 p-3 rounded-lg bg-slate-800/50 hover:bg-slate-800 transition-colors">
-                                        <i class="fab fa-aws text-2xl text-orange-400"></i>
-                                        <div>
-                                            <p class="text-sm font-semibold text-slate-200">AWS Cloud Architecting</p>
-                                            <p class="text-xs text-slate-500">Amazon Web Services</p>
-                                        </div>
-                                    </div>
-                                    <div class="flex items-center gap-3 p-3 rounded-lg bg-slate-800/50 hover:bg-slate-800 transition-colors">
-                                        <i class="fab fa-java text-2xl text-red-500"></i>
-                                        <div>
-                                            <p class="text-sm font-semibold text-slate-200">Java Programming</p>
-                                            <p class="text-xs text-slate-500">Professional Certification</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Contact Section -->
-        <section id="contact" class="py-24 px-4">
-            <div class="max-w-4xl mx-auto text-center mb-16 reveal">
-                <span class="text-emerald-400 font-mono text-sm">// let's connect</span>
-                <h2 class="text-3xl md:text-5xl font-bold text-slate-100 mt-2">Let's Work Together</h2>
-                <p class="text-slate-400 mt-4 max-w-xl mx-auto">
-                    I'm currently looking for internship opportunities. If you have a role that fits my skills, I'd love to hear from you.
-                </p>
-            </div>
-            
-            <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-8 reveal">
-                <!-- Contact Info -->
-                <div class="space-y-4">
-                    <a href="mailto:zed.maxcapinlac@gmail.com" class="block glass-card p-6 rounded-2xl hover:border-emerald-500/50 transition-all group">
-                        <div class="flex items-center gap-4">
-                            <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-500/20 to-lime-500/20 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform">
-                                <i class="fas fa-envelope text-2xl"></i>
-                            </div>
-                            <div>
-                                <p class="text-sm text-slate-400">Email Me</p>
-                                <p class="text-slate-100 font-medium break-all">zed.maxcapinlac@gmail.com</p>
-                            </div>
-                        </div>
-                    </a>
-                    <a href="tel:09939174342" class="block glass-card p-6 rounded-2xl hover:border-emerald-500/50 transition-all group">
-                        <div class="flex items-center gap-4">
-                            <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-500/20 to-lime-500/20 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform">
-                                <i class="fas fa-phone text-2xl"></i>
-                            </div>
-                            <div>
-                                <p class="text-sm text-slate-400">Call Me</p>
-                                <p class="text-slate-100 font-medium">0993-917-4342</p>
-                            </div>
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/ciddy-macapinlac-580a1432a" target="_blank" rel="noopener noreferrer" class="block glass-card p-6 rounded-2xl hover:border-blue-500/50 transition-all group">
-                        <div class="flex items-center gap-4">
-                            <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500/20 to-indigo-500/20 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform">
-                                <i class="fab fa-linkedin-in text-2xl"></i>
-                            </div>
-                            <div>
-                                <p class="text-sm text-slate-400">Connect</p>
-                                <p class="text-slate-100 font-medium">LinkedIn Profile</p>
-                            </div>
-                        </div>
-                    </a>
-                    <a href="https://github.com/ciddysed" target="_blank" rel="noopener noreferrer" class="block glass-card p-6 rounded-2xl hover:border-slate-500/50 transition-all group">
-                        <div class="flex items-center gap-4">
-                            <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-slate-500/20 to-slate-600/20 flex items-center justify-center text-slate-300 group-hover:scale-110 transition-transform">
-                                <i class="fab fa-github text-2xl"></i>
-                            </div>
-                            <div>
-                                <p class="text-sm text-slate-400">Follow</p>
-                                <p class="text-slate-100 font-medium">GitHub Profile</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                
-                <!-- Quick Actions -->
-                <div class="glass-card p-8 rounded-2xl border border-emerald-500/20 relative">
-                    <div class="absolute top-0 right-0 p-4">
-                        <span class="px-3 py-1 bg-emerald-500/20 text-emerald-300 text-xs rounded-full uppercase tracking-wider font-semibold">
-                            Quick Connect
-                        </span>
-                    </div>
-                    
-                    <h3 class="text-xl font-bold text-slate-100 mb-6 mt-4">Ready to reach out?</h3>
-                    
-                    <div class="space-y-4">
-                        <button onclick="navigator.clipboard.writeText('Internship Opportunity for Full Stack Developer Ciddy S. Macapinlac'); showToast('Subject copied!');" class="w-full p-4 bg-slate-800 rounded-xl text-left text-sm text-slate-300 border border-slate-700 hover:border-emerald-500 transition-all flex justify-between items-center group">
-                            <div>
-                                <p class="text-xs text-slate-500 mb-1">Click to copy email subject:</p>
-                                <p class="font-medium">Internship Opportunity for Ciddy S. Macapinlac</p>
-                            </div>
-                            <i class="fas fa-copy text-slate-500 group-hover:text-emerald-400 transition-colors"></i>
-                        </button>
-                        
-                        <a href="mailto:zed.maxcapinlac@gmail.com?subject=Internship%20Opportunity%20for%20Full%20Stack%20Developer%20Ciddy%20S.%20Macapinlac" class="block w-full p-4 bg-gradient-to-r from-emerald-600 to-lime-600 text-white text-center rounded-xl font-bold hover:from-emerald-500 hover:to-lime-500 transition-all shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30">
-                            <i class="fas fa-paper-plane mr-2"></i>Send Email Now
-                        </a>
-                        
-                        <button onclick="downloadResume()" class="w-full p-4 bg-slate-800 rounded-xl text-slate-300 border border-slate-700 hover:border-emerald-500 hover:text-emerald-400 transition-all font-medium flex items-center justify-center gap-2">
-                            <i class="fas fa-file-pdf"></i>Download My Resume
-                        </button>
-                    </div>
-                    
-                    <div class="mt-6 pt-6 border-t border-slate-700/50 text-center">
-                        <p class="text-xs text-slate-500">
-                            Based in <span class="text-emerald-400 font-medium">Agus, Lapu-Lapu City, Cebu</span>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-    
-    <!-- Footer -->
-    <footer class="border-t border-slate-800 bg-slate-950 py-12">
-        <div class="max-w-6xl mx-auto px-4">
-            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-lime-500 flex items-center justify-center text-slate-900 font-bold text-xl">
-                        C
-                    </div>
-                    <span class="font-bold text-slate-100">Ciddy<span class="text-emerald-400">.</span><span class="text-slate-400 font-mono text-sm">dev</span></span>
-                </div>
-                
-                <div class="flex items-center gap-6 text-xl">
-                    <a href="https://www.linkedin.com/in/ciddy-macapinlac-580a1432a" target="_blank" rel="noopener noreferrer" class="text-slate-500 hover:text-blue-400 transition-colors">
-                        <i class="fab fa-linkedin"></i>
-                    </a>
-                    <a href="https://github.com/ciddysed" target="_blank" rel="noopener noreferrer" class="text-slate-500 hover:text-white transition-colors">
-                        <i class="fab fa-github"></i>
-                    </a>
-                    <a href="mailto:zed.maxcapinlac@gmail.com" class="text-slate-500 hover:text-emerald-400 transition-colors">
-                        <i class="fas fa-envelope"></i>
-                    </a>
-                </div>
-                
-                <p class="text-slate-500 text-sm">
-                    © <span id="year"></span> Ciddy S. Macapinlac
-                </p>
-            </div>
-        </div>
-    </footer>
-    
-    <!-- Back to Top Button -->
-    <button id="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-        <i class="fas fa-arrow-up"></i>
-    </button>
-    
-    <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-24 right-8 bg-emerald-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-x-full opacity-0 transition-all duration-300 z-50">
-        <span id="toast-message"></span>
+
+    <div class="flow">
+      <div class="flow-node"><div class="label">trigger</div><div class="value">Lead enters CRM</div></div>
+      <div class="flow-arrow"></div>
+      <div class="flow-node"><div class="label">judgment</div><div class="value">Validate &amp; classify</div></div>
+      <div class="flow-arrow"></div>
+      <div class="flow-node"><div class="label">action</div><div class="value">LLM / API call</div></div>
+      <div class="flow-arrow"></div>
+      <div class="flow-node"><div class="label">result</div><div class="value">Clean, linked record</div></div>
     </div>
-    
-    <!-- Resume Modal -->
-    <div id="resume-modal">
-        <div class="w-full max-w-4xl mx-auto my-8 px-4">
-            <!-- Modal Controls -->
-            <div class="sticky top-0 z-10 flex justify-between items-center mb-6 no-print bg-slate-900/90 backdrop-blur py-4 rounded-lg">
-                <button onclick="closeResumeModal()" class="px-6 py-3 bg-slate-800 hover:bg-slate-700 rounded-lg text-slate-200 font-medium transition-colors">
-                    <i class="fas fa-arrow-left mr-2"></i>Back to Portfolio
-                </button>
-                <div class="flex gap-3">
-                    <button onclick="window.print()" class="px-6 py-3 bg-gradient-to-r from-emerald-600 to-lime-600 hover:from-emerald-500 hover:to-lime-500 rounded-lg text-white font-medium transition-all">
-                        <i class="fas fa-print mr-2"></i>Print/PDF
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Resume Content -->
-            <div id="resume-content" class="bg-white text-slate-900 p-8 md:p-12 rounded-xl shadow-2xl">
-                <!-- Header -->
-                <div class="border-b-4 border-emerald-500 pb-6 mb-8">
-                    <h1 class="text-4xl font-bold text-slate-900 mb-1">CIDDY S. MACAPINLAC</h1>
-                    <p class="text-xl text-emerald-600 font-semibold mb-4">Full Stack Developer</p>
-                    <div class="text-sm text-slate-600 space-y-1">
-                        <p>Agus, Lapu-Lapu City, Cebu • 0993-917-4342 • zed.maxcapinlac@gmail.com</p>
-                        <p>LinkedIn: <span class="text-blue-600 font-medium">Ciddy Macapinlac</span> | GitHub: <span class="text-blue-600 font-medium">ciddysed</span></p>
-                    </div>
-                </div>
-                
-                <!-- Professional Summary -->
-                <div class="mb-8">
-                    <h2 class="text-lg font-bold text-slate-900 border-b-2 border-emerald-500 mb-3 pb-1">PROFESSIONAL SUMMARY</h2>
-                    <p class="text-sm leading-relaxed text-slate-800">
-                        Full Stack Developer with hands-on experience in building responsive and scalable web applications. Skilled in Java, PHP, Python, React, Spring Boot, and MySQL. Strong foundation in API development, OOP, and full system integration. Passionate about creating efficient solutions and improving user experience through clean, modern development practices.
-                    </p>
-                </div>
-                
-                <!-- Technical Skills -->
-                <div class="mb-8">
-                    <h2 class="text-lg font-bold text-slate-900 border-b-2 border-emerald-500 mb-3 pb-1">TECHNICAL SKILLS</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                        <div>
-                            <span class="font-semibold text-slate-900">Languages & Frameworks:</span>
-                            <span class="text-slate-700"> Java, PHP, Python, JavaScript, React, Spring Boot, HTML, CSS, C</span>
-                        </div>
-                        <div>
-                            <span class="font-semibold text-slate-900">Databases:</span>
-                            <span class="text-slate-700"> MySQL, PostgreSQL</span>
-                        </div>
-                        <div>
-                            <span class="font-semibold text-slate-900">Core Skills:</span>
-                            <span class="text-slate-700"> OOP, RESTful APIs, Full Stack Development, Problem-Solving</span>
-                        </div>
-                        <div>
-                            <span class="font-semibold text-slate-900">Tools:</span>
-                            <span class="text-slate-700"> Git, AWS, Netlify, VS Code</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Projects -->
-                <div class="mb-8">
-                    <h2 class="text-lg font-bold text-slate-900 border-b-2 border-emerald-500 mb-3 pb-1">PROJECTS</h2>
-                    
-                    <div class="mb-4">
-                        <div class="flex items-center justify-between mb-1">
-                            <h3 class="font-bold text-slate-900">SleepSync — Full Stack Wellness App</h3>
-                            <span class="text-xs text-blue-600 font-medium">sleepsyncapp.netlify.app</span>
-                        </div>
-                        <ul class="list-disc list-inside text-sm text-slate-700 space-y-1 ml-2">
-                            <li>Developed a wellness platform to help users improve sleep quality.</li>
-                            <li>Built frontend using React with responsive UI/UX.</li>
-                            <li>Integrated backend REST APIs using Java + Spring Boot.</li>
-                            <li>Designed database schema and implemented secure data storage in MySQL.</li>
-                        </ul>
-                    </div>
-                    <div class="mb-4">
-                        <div class="flex items-center justify-between mb-1">
-                            <h3 class="font-bold text-slate-900">ETEEAPP — Academic Application System</h3>
-                            <span class="text-xs text-blue-600 font-medium">eteeap.netlify.app</span>
-                        </div>
-                        <ul class="list-disc list-inside text-sm text-slate-700 space-y-1 ml-2">
-                            <li>Digital platform that streamlines the ETEEAP application workflow.</li>
-                            <li>Contributed to backend logic and frontend structure.</li>
-                            <li>Helped automate document submission and user processing.</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <!-- Work Experience -->
-                <div class="mb-8">
-                    <h2 class="text-lg font-bold text-slate-900 border-b-2 border-emerald-500 mb-3 pb-1">WORK EXPERIENCE</h2>
-                    
-                    <div class="mb-3">
-                        <h3 class="font-bold text-slate-900">Tech Support — MICASA (Family Business)</h3>
-                        <ul class="list-disc list-inside text-sm text-slate-700 space-y-1 ml-2 mt-1">
-                            <li>Resolved hardware/software issues to maintain daily operations.</li>
-                            <li>Assisted in small-scale internal tool development and system maintenance.</li>
-                            <li>Supported troubleshooting, configuration, and IT workflow optimization.</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <!-- Education -->
-                <div class="mb-8">
-                    <h2 class="text-lg font-bold text-slate-900 border-b-2 border-emerald-500 mb-3 pb-1">EDUCATION</h2>
-                    <div class="text-sm space-y-2">
-                        <div>
-                            <p class="font-bold text-slate-900">BS Information Technology</p>
-                            <p class="text-slate-700">Cebu Institute of Technology – University (2021–2025)</p>
-                        </div>
-                        <div>
-                            <p class="font-bold text-slate-900">Senior High School</p>
-                            <p class="text-slate-700">Saint Alphonsus Catholic School (2019–2021)</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Certifications -->
-                <div class="mb-8">
-                    <h2 class="text-lg font-bold text-slate-900 border-b-2 border-emerald-500 mb-3 pb-1">CERTIFICATIONS</h2>
-                    <ul class="list-disc list-inside text-sm text-slate-700 space-y-1 ml-2">
-                        <li>AWS Cloud Foundation</li>
-                        <li>AWS Cloud Architecting</li>
-                        <li>Java Programming</li>
-                        <li>MySQL</li>
-                    </ul>
-                </div>
-                
-                <!-- Footer -->
-                <div class="text-center text-xs text-slate-500 border-t border-slate-200 pt-4 mt-8">
-                    <p>References available upon request</p>
-                </div>
-            </div>
-        </div>
+  </div>
+</header>
+
+<section id="about">
+  <div class="wrap">
+    <h2 class="section-title">About</h2>
+    <div class="about-text">
+      <p>I'm a software developer focused on automation and AI systems. I build workflows, integrations, and intelligent pipelines that reduce manual work and keep operations running reliably.</p>
+      <p>I currently work on agentic AI systems and business automation infrastructure, alongside a separate role handling GoHighLevel automation for CRM and lead-management systems. My background covers full-stack development, CRM automation, webhook integrations, and hands-on work with AI-powered workflows, including systems currently running in live production, not prototypes.</p>
+      <p>I work best at the intersection of technical systems and real business problems: finding where a process actually breaks before reaching for automation as the fix.</p>
     </div>
-    
-    <script>
-        // Loading Screen
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementById('loader').classList.add('hidden');
-            }, 1000);
-        });
-        
-        // Update Year
-        document.getElementById('year').textContent = new Date().getFullYear();
-        
-        // Typing Animation
-        const typingTexts = ['Full Stack Developer', 'Java Enthusiast', 'React Developer', 'Problem Solver'];
-        let textIndex = 0;
-        let charIndex = 0;
-        let isDeleting = false;
-        const typingElement = document.getElementById('typing-text');
-        
-        function typeText() {
-            const currentText = typingTexts[textIndex];
-            
-            if (isDeleting) {
-                typingElement.textContent = currentText.substring(0, charIndex - 1);
-                charIndex--;
-            } else {
-                typingElement.textContent = currentText.substring(0, charIndex + 1);
-                charIndex++;
-            }
-            
-            let typeSpeed = isDeleting ? 50 : 100;
-            
-            if (!isDeleting && charIndex === currentText.length) {
-                typeSpeed = 2000;
-                isDeleting = true;
-            } else if (isDeleting && charIndex === 0) {
-                isDeleting = false;
-                textIndex = (textIndex + 1) % typingTexts.length;
-                typeSpeed = 500;
-            }
-            
-            setTimeout(typeText, typeSpeed);
-        }
-        
-        typeText();
-        
-        // Particle Background
-        const canvas = document.getElementById('particles-canvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        
-        class Particle {
-            constructor() {
-                this.reset();
-            }
-            
-            reset() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 0.5;
-                this.speedX = (Math.random() - 0.5) * 0.5;
-                this.speedY = (Math.random() - 0.5) * 0.5;
-                this.opacity = Math.random() * 0.5 + 0.2;
-            }
-            
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                
-                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
-            }
-            
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(16, 185, 129, ${this.opacity})`;
-                ctx.fill();
-            }
-        }
-        
-        function initParticles() {
-            particles = [];
-            const particleCount = Math.floor((canvas.width * canvas.height) / 15000);
-            for (let i = 0; i < particleCount; i++) {
-                particles.push(new Particle());
-            }
-        }
-        
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            particles.forEach((particle, i) => {
-                particle.update();
-                particle.draw();
-                
-                // Draw connections
-                particles.slice(i + 1).forEach(otherParticle => {
-                    const dx = particle.x - otherParticle.x;
-                    const dy = particle.y - otherParticle.y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-                    
-                    if (distance < 150) {
-                        ctx.beginPath();
-                        ctx.strokeStyle = `rgba(16, 185, 129, ${0.1 * (1 - distance / 150)})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.moveTo(particle.x, particle.y);
-                        ctx.lineTo(otherParticle.x, otherParticle.y);
-                        ctx.stroke();
-                    }
-                });
-            });
-            
-            requestAnimationFrame(animateParticles);
-        }
-        
-        resizeCanvas();
-        initParticles();
-        animateParticles();
-        
-        window.addEventListener('resize', () => {
-            resizeCanvas();
-            initParticles();
-        });
-        
-        // Scroll Progress
-        window.addEventListener('scroll', () => {
-            const scrollProgress = document.getElementById('scroll-progress');
-            const scrollTop = window.scrollY;
-            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-            const scrollPercent = (scrollTop / docHeight) * 100;
-            scrollProgress.style.width = scrollPercent + '%';
-            
-            // Back to top button
-            const backToTop = document.getElementById('back-to-top');
-            if (scrollTop > 500) {
-                backToTop.classList.add('visible');
-            } else {
-                backToTop.classList.remove('visible');
-            }
-        });
-        
-        // Mobile Menu Toggle
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const hamburger = document.getElementById('hamburger');
-        let menuOpen = false;
-        
-        mobileMenuBtn.addEventListener('click', () => {
-            menuOpen = !menuOpen;
-            mobileMenu.classList.toggle('open');
-            
-            const spans = hamburger.querySelectorAll('span');
-            if (menuOpen) {
-                spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
-                spans[1].style.opacity = '0';
-                spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
-            } else {
-                spans[0].style.transform = 'none';
-                spans[1].style.opacity = '1';
-                spans[2].style.transform = 'none';
-            }
-        });
-        
-        // Close mobile menu on link click
-        mobileMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                menuOpen = false;
-                mobileMenu.classList.remove('open');
-                const spans = hamburger.querySelectorAll('span');
-                spans[0].style.transform = 'none';
-                spans[1].style.opacity = '1';
-                spans[2].style.transform = 'none';
-            });
-        });
-        
-        // Smooth Scrolling
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-        
-        // Scroll Reveal Animation
-        const revealElements = document.querySelectorAll('.reveal');
-        
-        const revealObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                    
-                    // Animate skill bars
-                    entry.target.querySelectorAll('.skill-progress-bar').forEach(bar => {
-                        const progress = bar.style.getPropertyValue('--progress');
-                        bar.style.transform = `scaleX(${progress})`;
-                        bar.classList.add('animate');
-                    });
-                }
-            });
-        }, { threshold: 0.1 });
-        
-        revealElements.forEach(el => revealObserver.observe(el));
-        
-        // Navbar Scroll Effect
-        window.addEventListener('scroll', () => {
-            const nav = document.getElementById('navbar');
-            if (window.scrollY > 50) {
-                nav.classList.add('shadow-lg', 'bg-slate-900/95');
-            } else {
-                nav.classList.remove('shadow-lg', 'bg-slate-900/95');
-            }
-        });
-        
-        // Toast Notification
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            const toastMessage = document.getElementById('toast-message');
-            toastMessage.textContent = message;
-            toast.style.transform = 'translateX(0)';
-            toast.style.opacity = '1';
-            
-            setTimeout(() => {
-                toast.style.transform = 'translateX(100%)';
-                toast.style.opacity = '0';
-            }, 3000);
-        }
-        
-        // Resume Modal Functions
-        function downloadResume() {
-            document.getElementById('resume-modal').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-        
-        function closeResumeModal() {
-            document.getElementById('resume-modal').classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-        
-        // Close modal on ESC key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeResumeModal();
-            }
-        });
-        
-        // Close modal when clicking outside content
-        document.getElementById('resume-modal').addEventListener('click', (e) => {
-            if (e.target.id === 'resume-modal') {
-                closeResumeModal();
-            }
-        });
-    </script>
+    <div class="about-facts">
+      <div class="fact"><div class="k">Based in</div><div class="v">Cebu, Philippines</div></div>
+      <div class="fact"><div class="k">Focus</div><div class="v">GHL &amp; AI Automation</div></div>
+      <div class="fact"><div class="k">Availability</div><div class="v">Freelance &amp; contract</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="work">
+  <div class="wrap">
+    <h2 class="section-title">Work</h2>
+
+    <div class="project">
+      <div class="project-head">
+        <h3 class="project-title">AI-Personalized Lead Pipeline</h3>
+        <span class="project-status status-live">Live system</span>
+      </div>
+      <p class="project-desc">An end-to-end pipeline that turns a raw form submission into a personalized, prioritized outreach, removing the manual work of researching and drafting a first message for every new lead.</p>
+      <div class="project-flow">
+        <div class="pf-step"><div class="k">trigger</div><div class="v">GHL form submission</div></div>
+        <div class="pf-arrow">→</div>
+        <div class="pf-step"><div class="k">enrich</div><div class="v">Company data via API</div></div>
+        <div class="pf-arrow">→</div>
+        <div class="pf-step"><div class="k">generate</div><div class="v">LLM-drafted outreach + tier classification</div></div>
+        <div class="pf-arrow">→</div>
+        <div class="pf-step"><div class="k">result</div><div class="v">Team alert + CRM update</div></div>
+      </div>
+      <div class="project-tools">
+        <span class="tool-tag">n8n</span>
+        <span class="tool-tag">GoHighLevel</span>
+        <span class="tool-tag">LLM API</span>
+        <span class="tool-tag">Webhooks</span>
+      </div>
+    </div>
+
+    <div class="project">
+      <div class="project-head">
+        <h3 class="project-title">Contact Data Normalization System</h3>
+        <span class="project-status status-live">Live in production</span>
+      </div>
+      <p class="project-desc">Related-contact data, like a lead's family members, co-signers, or references, was trapped inside custom fields, unusable for follow-up. This workflow extracts, validates, and turns that data into real, linked, deduplicated CRM records automatically. Currently running in a live production CRM.</p>
+      <div class="project-flow">
+        <div class="pf-step"><div class="k">trigger</div><div class="v">Lead tagged "has relatives"</div></div>
+        <div class="pf-arrow">→</div>
+        <div class="pf-step"><div class="k">validate</div><div class="v">Check for usable phone/email</div></div>
+        <div class="pf-arrow">→</div>
+        <div class="pf-step"><div class="k">upsert</div><div class="v">Create or update, no duplicates</div></div>
+        <div class="pf-arrow">→</div>
+        <div class="pf-step"><div class="k">link</div><div class="v">Connected back to parent lead</div></div>
+      </div>
+      <div class="project-tools">
+        <span class="tool-tag">GoHighLevel</span>
+        <span class="tool-tag">API / Webhooks</span>
+        <span class="tool-tag">Conditional logic</span>
+      </div>
+      <a class="project-link" href="https://ciddysed.github.io/lead-recovery-portfolio" target="_blank">Full case study →</a>
+    </div>
+
+    <div class="project">
+      <div class="project-head">
+        <h3 class="project-title">Legal Document Intake Redesign</h3>
+        <span class="project-status status-case">Case study</span>
+      </div>
+      <p class="project-desc">A document-collection workflow used native e-signature to collect legal authorization, but the process legally required a wet-signed, physically signed document; I diagnosed the mismatch and redesigned intake around a photographed file upload, then rebuilt every downstream step that depended on the old format.</p>
+      <div class="project-flow">
+        <div class="pf-step"><div class="k">diagnose</div><div class="v">E-signature didn't meet legal requirement</div></div>
+        <div class="pf-arrow">→</div>
+        <div class="pf-step"><div class="k">redesign</div><div class="v">File-upload intake for wet signatures</div></div>
+        <div class="pf-arrow">→</div>
+        <div class="pf-step"><div class="k">rebuild</div><div class="v">Downstream tracking &amp; handoff logic</div></div>
+        <div class="pf-arrow">→</div>
+        <div class="pf-step"><div class="k">result</div><div class="v">Legally valid, live workflow</div></div>
+      </div>
+      <div class="project-tools">
+        <span class="tool-tag">GoHighLevel</span>
+        <span class="tool-tag">Workflow design</span>
+        <span class="tool-tag">Process diagnosis</span>
+      </div>
+    </div>
+
+    <div class="project">
+      <div class="project-head">
+        <h3 class="project-title">SleepSync</h3>
+        <span class="project-status status-case">Solo project</span>
+      </div>
+      <p class="project-desc">A full-stack wellness app for tracking and improving sleep quality, built end to end from database schema through a responsive frontend, as a solo project. Unlike the automation work above, this one's a straightforward full-stack build, not a business workflow.</p>
+      <div class="project-tools">
+        <span class="tool-tag">React</span>
+        <span class="tool-tag">Spring Boot</span>
+        <span class="tool-tag">MySQL</span>
+        <span class="tool-tag">REST API</span>
+      </div>
+      <a class="project-link" href="https://sleepsyncapp.netlify.app" target="_blank">Live demo →</a>
+    </div>
+
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <h2 class="section-title">Skills</h2>
+    <div class="skills-grid">
+      <div class="skill-group">
+        <div class="group-title">AI &amp; Automation</div>
+        <ul>
+          <li>LLM Integration (Claude, ChatGPT APIs)</li>
+          <li>Prompt Engineering</li>
+          <li>Agentic / RAG Workflows</li>
+          <li>n8n</li>
+          <li>GoHighLevel</li>
+          <li>Webhook-Driven Automation</li>
+        </ul>
+      </div>
+      <div class="skill-group">
+        <div class="group-title">Development</div>
+        <ul>
+          <li>Python</li>
+          <li>Java, Spring Boot</li>
+          <li>JavaScript, React</li>
+          <li>REST APIs</li>
+        </ul>
+      </div>
+      <div class="skill-group">
+        <div class="group-title">Data &amp; Integrations</div>
+        <ul>
+          <li>API Integration</li>
+          <li>Web Scraping (Playwright, Selenium, BeautifulSoup)</li>
+          <li>Automated Data Pipelines</li>
+        </ul>
+      </div>
+      <div class="skill-group">
+        <div class="group-title">Cloud &amp; Tools</div>
+        <ul>
+          <li>AWS (Cloud Foundation &amp; Architecting)</li>
+          <li>MySQL, PostgreSQL</li>
+          <li>Git</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap contact-block">
+    <h2 class="contact-title">Have a process that's held together by manual work?</h2>
+    <p class="contact-sub">Open to freelance and contract projects in GoHighLevel automation, n8n workflows, and AI/LLM integration.</p>
+    <div class="contact-links">
+      <a class="btn btn-primary" href="mailto:zed.maxcapinlac@gmail.com">Email me</a>
+      <a class="btn btn-secondary" href="https://www.linkedin.com/in/ciddy-macapinlac-580a1432a" target="_blank">LinkedIn</a>
+      <a class="btn btn-secondary" href="https://github.com/ciddysed" target="_blank">GitHub</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap" style="display:flex; justify-content:space-between; width:100%;">
+    <span>© 2026 Ciddy Macapinlac</span>
+    <span>Cebu, Philippines</span>
+  </div>
+</footer>
+
 </body>
 </html>
