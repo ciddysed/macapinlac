@@ -4,6 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ciddy Macapinlac | AI Automation Specialist</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' fill='%230A0E13'/%3E%3Crect x='9' y='9' width='6' height='6' fill='%2345E0D5'/%3E%3C/svg%3E">
+<meta name="description" content="AI Automation Specialist working across GoHighLevel, n8n, and LLM-integrated workflows. Currently building agentic automation infrastructure in production, plus taking on freelance automation projects.">
+<meta property="og:title" content="Ciddy Macapinlac | AI Automation Specialist">
+<meta property="og:description" content="AI Automation Specialist working across GoHighLevel, n8n, and LLM-integrated workflows. Currently building agentic automation infrastructure in production, plus taking on freelance automation projects.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://ciddysed.github.io/macapinlac/">
+<meta property="og:image" content="https://ciddysed.github.io/macapinlac/face.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ciddy Macapinlac | AI Automation Specialist">
+<meta name="twitter:description" content="AI Automation Specialist working across GoHighLevel, n8n, and LLM-integrated workflows.">
+<meta name="twitter:image" content="https://ciddysed.github.io/macapinlac/face.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -22,9 +33,33 @@
     --amber-dim: rgba(255, 180, 84, 0.12);
     --line: rgba(255, 255, 255, 0.10);
     --line-strong: rgba(255, 255, 255, 0.20);
+    --btn-text: #06110F;
+    --nav-bg: rgba(10, 14, 19, 0.85);
+    --bg-glow-1: rgba(69,224,213,0.07);
+    --bg-glow-2: rgba(255,180,84,0.05);
     --display: 'Space Grotesk', sans-serif;
     --sans: 'IBM Plex Sans', sans-serif;
     --mono: 'IBM Plex Mono', monospace;
+  }
+
+  html[data-theme="light"] {
+    --bg: #F3F5F7;
+    --bg-2: #EEF1F3;
+    --panel: #FFFFFF;
+    --panel-hover: #F7F9FA;
+    --text: #10161F;
+    --muted: #45525C;
+    --muted-dim: #5A6975;
+    --accent: #086F69;
+    --accent-dim: rgba(8, 111, 105, 0.10);
+    --amber: #8F4F08;
+    --amber-dim: rgba(143, 79, 8, 0.10);
+    --line: rgba(0, 0, 0, 0.10);
+    --line-strong: rgba(0, 0, 0, 0.22);
+    --btn-text: #FFFFFF;
+    --nav-bg: rgba(243, 245, 247, 0.88);
+    --bg-glow-1: rgba(8,111,105,0.05);
+    --bg-glow-2: rgba(143,79,8,0.04);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -44,9 +79,10 @@
     font-size: 16px;
     -webkit-font-smoothing: antialiased;
     background-image:
-      radial-gradient(ellipse 800px 500px at 15% -10%, rgba(69,224,213,0.07), transparent),
-      radial-gradient(ellipse 700px 500px at 100% 10%, rgba(255,180,84,0.05), transparent);
+      radial-gradient(ellipse 800px 500px at 15% -10%, var(--bg-glow-1), transparent),
+      radial-gradient(ellipse 700px 500px at 100% 10%, var(--bg-glow-2), transparent);
     background-attachment: fixed;
+    transition: background-color 0.2s, color 0.2s;
   }
 
   a { color: inherit; }
@@ -63,7 +99,7 @@
     position: sticky;
     top: 0;
     z-index: 50;
-    background: rgba(10, 14, 19, 0.85);
+    background: var(--nav-bg);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--line);
   }
@@ -115,6 +151,30 @@
     transition: background 0.15s, color 0.15s;
   }
   .nav-cta:hover { background: var(--accent); color: var(--bg); }
+
+  .theme-toggle {
+    background: none;
+    border: 1px solid var(--line-strong);
+    width: 38px;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text);
+    flex: 0 0 auto;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+  .theme-toggle svg { width: 17px; height: 17px; }
+  .theme-toggle .icon-moon { display: none; }
+  html[data-theme="light"] .theme-toggle .icon-sun { display: none; }
+  html[data-theme="light"] .theme-toggle .icon-moon { display: block; }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
 
   /* ---------- HERO ---------- */
   header.hero {
@@ -177,7 +237,7 @@
   }
   .btn-primary {
     background: var(--accent);
-    color: #06110F;
+    color: var(--btn-text);
   }
   .btn-primary:hover { box-shadow: 0 0 20px rgba(69,224,213,0.4); transform: translateY(-1px); }
   .btn-secondary {
@@ -636,7 +696,7 @@
     font-weight: 500;
     padding: 11px 22px;
     background: var(--accent);
-    color: #06110F;
+    color: var(--btn-text);
     border: none;
     cursor: pointer;
     transition: box-shadow 0.15s, transform 0.15s;
@@ -727,7 +787,13 @@
       <li><a href="#pricing">Pricing</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
-    <a class="nav-cta" href="#contact">Get in touch</a>
+    <div class="nav-right">
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch between day and night mode">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <a class="nav-cta" href="#contact">Get in touch</a>
+    </div>
   </div>
 </nav>
 
@@ -1100,6 +1166,7 @@
     <p class="contact-sub">Open to freelance and contract projects in GoHighLevel automation, n8n workflows, and AI/LLM integration.</p>
     <div class="contact-links">
       <a class="btn btn-primary" href="mailto:zed.maxcapinlac@gmail.com">Email me</a>
+      <a class="btn btn-secondary" href="resume.pdf" target="_blank">Download Resume</a>
       <a class="btn btn-secondary" href="https://www.linkedin.com/in/ciddy-macapinlac-580a1432a" target="_blank">LinkedIn</a>
       <a class="btn btn-secondary" href="https://github.com/ciddysed" target="_blank">GitHub</a>
     </div>
@@ -1294,6 +1361,33 @@
       el.classList.add('pulse-cycle');
     });
   });
+</script>
+<script>
+  // Day/night theme toggle. Defaults to the visitor's OS-level preference
+  // on first visit, then remembers their explicit choice after that.
+  (function () {
+    var root = document.documentElement;
+    var toggle = document.getElementById('theme-toggle');
+    var stored = localStorage.getItem('theme');
+
+    function apply(theme) {
+      if (theme === 'light') {
+        root.setAttribute('data-theme', 'light');
+      } else {
+        root.removeAttribute('data-theme');
+      }
+    }
+
+    var initial = stored || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    apply(initial);
+
+    toggle.addEventListener('click', function () {
+      var current = root.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+      var next = current === 'light' ? 'dark' : 'light';
+      apply(next);
+      localStorage.setItem('theme', next);
+    });
+  })();
 </script>
 </body>
 </html>
