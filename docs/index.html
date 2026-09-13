@@ -412,6 +412,13 @@
   .project {
     padding: 40px 0;
     border-top: 1px solid var(--line);
+    position: relative;
+  }
+  .project:has(.project-link) {
+    transition: background 0.15s;
+  }
+  .project:has(.project-link):hover {
+    background: var(--panel);
   }
   .project:first-of-type { border-top: none; padding-top: 0; }
   .project-head {
@@ -503,6 +510,11 @@
     text-underline-offset: 3px;
     color: var(--accent);
     display: inline-block;
+  }
+  .project-link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
   }
 
   /* ---------- WHY / PRICING ---------- */
@@ -796,7 +808,7 @@
     .nav-links { display: none; }
     h2.contact-title { font-size: 27px; }
     .project-flow { flex-direction: column; }
-    .pf-arrow { transform: rotate(90deg); width: auto; padding: 2px 0; }
+    .pf-arrow { transform: rotate(90deg); width: 22px; height: 22px; padding: 0; align-self: center; flex: 0 0 auto; }
     .flow { flex-wrap: wrap; row-gap: 10px; }
     .flow-arrow { display: none; }
     .flow-node { flex: 1 1 calc(50% - 6px); min-width: 0; }
@@ -906,23 +918,23 @@
         <span class="tool-tag">OpenAI API</span>
         <span class="tool-tag">Agent Logic</span>
       </div>
-      <a class="project-link" href="message-drafter-case-study.html">Full case study →</a>
+      <a class="project-link" href="https://ciddysed.github.io/lead-recovery-portfolio/#project-drafter" target="_blank">Full case study →</a>
     </div>
 
     <div class="project">
       <div class="project-head">
         <h3 class="project-title">AI-Personalized Lead Pipeline</h3>
-        <span class="project-status status-live">Live system</span>
+        <span class="project-status status-case">Hiring assessment project</span>
       </div>
-      <p class="project-desc">An end-to-end pipeline that turns a raw form submission into a personalized, prioritized outreach, removing the manual work of researching and drafting a first message for every new lead.</p>
+      <p class="project-desc">Built as a skills assessment during Metawatt's hiring process, not a live client system. Where the project above drafts outreach and lets a reply gate progress, this one goes wider: enriching a lead with external company data and automatically prioritizing it before a human ever sees it.</p>
       <div class="project-flow">
         <div class="pf-step"><div class="k">trigger</div><div class="v">GHL form submission</div></div>
         <div class="pf-arrow">→</div>
-        <div class="pf-step"><div class="k">enrich</div><div class="v">Company data via API</div></div>
+        <div class="pf-step"><div class="k">enrich</div><div class="v">Company data via external API</div></div>
         <div class="pf-arrow">→</div>
-        <div class="pf-step"><div class="k">generate</div><div class="v">LLM-drafted outreach + tier classification</div></div>
+        <div class="pf-step"><div class="k">prioritize</div><div class="v">LLM outreach + tier classification</div></div>
         <div class="pf-arrow">→</div>
-        <div class="pf-step"><div class="k">result</div><div class="v">Team alert + CRM update</div></div>
+        <div class="pf-step"><div class="k">notify</div><div class="v">Discord alert + CRM update</div></div>
       </div>
       <div class="project-tools">
         <span class="tool-tag">n8n</span>
@@ -952,7 +964,7 @@
         <span class="tool-tag">API / Webhooks</span>
         <span class="tool-tag">Conditional logic</span>
       </div>
-      <a class="project-link" href="contact-normalization-case-study.html">Full case study →</a>
+      <a class="project-link" href="https://ciddysed.github.io/lead-recovery-portfolio/#project-crm" target="_blank">Full case study →</a>
     </div>
 
     <div class="project">
