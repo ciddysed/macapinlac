@@ -741,6 +741,18 @@
     min-height: 90px;
   }
   .demo-textarea:focus { outline: none; border-color: var(--accent); }
+  .demo-input {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--line-strong);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+  }
+  .demo-input:focus { outline: none; border-color: var(--accent); }
+  .demo-input::placeholder, .demo-textarea::placeholder { color: var(--muted-dim); }
   .demo-controls {
     margin-top: 14px;
     display: flex;
@@ -1334,8 +1346,20 @@
   <div class="wrap contact-block">
     <h2 class="contact-title">Have a process that's held together by manual work?</h2>
     <p class="contact-sub">Open to freelance and contract projects in GoHighLevel automation, n8n workflows, and AI/LLM integration.</p>
-    <div class="contact-links">
-      <a class="btn btn-primary" href="mailto:zed.maxcapinlac@gmail.com"><svg class="tag-icon" style="width:15px;height:15px;margin-right:7px;vertical-align:-3px;fill:currentColor;"><use href="#icon-email"></use></svg>Email me</a>
+
+    <form class="demo-box contact-form" id="contact-form" style="max-width: 560px; margin-top: 32px;">
+      <div class="demo-label">// send a message directly, no email client needed</div>
+      <input class="demo-input" type="text" name="name" placeholder="Your name" required>
+      <input class="demo-input" type="email" name="email" placeholder="Your email" required>
+      <textarea class="demo-textarea" name="message" placeholder="What are you looking to build or automate?" required style="min-height: 100px;"></textarea>
+      <div class="demo-controls">
+        <button class="demo-btn" type="submit" id="contact-submit">Send message</button>
+        <span class="demo-samples" id="contact-status"></span>
+      </div>
+      <p class="demo-note">Sent directly from this page, no redirect to an email app.</p>
+    </form>
+
+    <div class="contact-links" style="margin-top: 24px;">
       <a class="btn btn-secondary" href="resume.pdf" target="_blank"><svg class="tag-icon" style="width:15px;height:15px;margin-right:7px;vertical-align:-3px;fill:currentColor;"><use href="#icon-resume"></use></svg>Download Resume</a>
       <a class="btn btn-secondary" href="https://www.linkedin.com/in/ciddy-macapinlac-580a1432a" target="_blank"><svg class="tag-icon" style="width:15px;height:15px;margin-right:7px;vertical-align:-3px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><use href="#icon-linkedin"></use></svg>LinkedIn</a>
       <a class="btn btn-secondary" href="https://github.com/ciddysed" target="_blank"><svg class="tag-icon" style="width:15px;height:15px;margin-right:7px;vertical-align:-3px;fill:currentColor;"><use href="#icon-github"></use></svg>GitHub</a>
@@ -1620,6 +1644,46 @@
       var next = current === 'light' ? 'dark' : 'light';
       apply(next);
       localStorage.setItem('theme', next);
+    });
+  })();
+</script>
+<script>
+  // Contact form submission via Formspree (a free service that relays
+  // static-site form submissions to a real email inbox, since GitHub
+  // Pages has no backend of its own). Endpoint is wired to
+  // zed.maxcapinlac@gmail.com.
+  (function () {
+    var FORMSPREE_ENDPOINT = 'https://formspree.io/f/xdeknojy';
+    var form = document.getElementById('contact-form');
+    var submitBtn = document.getElementById('contact-submit');
+    var status = document.getElementById('contact-status');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+      status.textContent = '';
+
+      fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: new FormData(form)
+      }).then(function (response) {
+        if (response.ok) {
+          form.reset();
+          status.textContent = 'Message sent, thanks!';
+          status.style.color = 'var(--accent)';
+          submitBtn.textContent = 'Send message';
+          submitBtn.disabled = false;
+        } else {
+          throw new Error('Submission failed');
+        }
+      }).catch(function () {
+        status.textContent = 'Something went wrong, email zed.maxcapinlac@gmail.com directly.';
+        status.style.color = 'var(--amber)';
+        submitBtn.textContent = 'Send message';
+        submitBtn.disabled = false;
+      });
     });
   })();
 </script>
